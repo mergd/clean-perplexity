@@ -10,10 +10,16 @@
   margin-bottom: 20px;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
 .button {
   font-size: 24px;
   padding: 10px 20px;
-  margin-bottom: 20px;
+  margin-right: 10px;
   border-radius: 5px;
   background-color: #0077cc;
   color: white;
@@ -21,12 +27,30 @@
   cursor: pointer;
 }
 
+.button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
 .textarea {
   width: 100%;
   max-width: 600px;
   height: 400px;
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+.toast {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 999;
 }
