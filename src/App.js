@@ -58,7 +58,11 @@ const App = () => {
           <FaCopy className="icon" />
           Copy
         </button>
-        <button className="button" onClick={handleClear}>
+        <button
+          className="button"
+          onClick={handleClear}
+          disabled={!text.trim()}
+        >
           <FaTrash className="icon" />
         </button>
       </div>
