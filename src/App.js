@@ -6,9 +6,9 @@ const App = () => {
   const [text, setText] = useState("");
   const [showToast, setShowToast] = useState(false);
 
-  const handlePaste = (event) => {
+  const handlePaste = async () => {
     try {
-      const clipboardText = event.clipboardData.getData("text");
+      const clipboardText = await navigator.clipboard.readText();
       setText(removeCitations(clipboardText));
     } catch (err) {
       console.error("Failed to read clipboard contents: ", err);
