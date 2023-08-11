@@ -26,26 +26,33 @@ const App = () => {
   };
 
   const removeCitations = (text) => {
-    // remove bracketed citations outside of code blocks
-    let newText = text.replace(/(?<!`)((?<!\w)\[\d+\](?!\w))/g, "");
+    return removePatternFromStringWithCode(text);
+  };
+  function removePatternFromStringWithNoCode(notCodeString) {
+    return notCodeString.replace(/\s*\[\d+\]\s*/g, "");
+  }
 
-    // remove "Citations:" section outside of code blocks
-    const citationIndex = newText.indexOf("Citations:");
-    if (citationIndex !== -1) {
-      newText = newText.substring(0, citationIndex);
+  function removePatternFromStringWithCode(stringWithCode) {
+    // remove any text after the "Citations:" section
+    const citationsEndIndex = stringWithCode.indexOf("Citations:");
+    if (citationsEndIndex !== -1) {
+      stringWithCode = stringWithCode.substring(0, citationsEndIndex);
+    }
+    const multilineCodePattern = /(```.+?```)/s;
+    const singlelineCodePattern = /(`.+?`)/s;
+    const chunks = stringWithCode.split(multilineCodePattern);
+    for (let i = 0; i < chunks.length; i += 2) {
+      const subChunks = chunks[i].split(singlelineCodePattern);
+
+      for (let j = 0; j < subChunks.length; j += 2) {
+        subChunks[j] = removePatternFromStringWithNoCode(subChunks[j]);
+        chunks[i] = subChunks.join("");
+      }
     }
 
-    // remove bracketed citations inside of code blocks
-    newText = newText.replace(/`[^`]*`|\n```[\s\S]*?\n```/g, (match) => {
-      if (match.startsWith("`")) {
-        return match;
-      } else {
-        return match.replace(/(?<!`)((?<!\w)\[\d+\](?!\w))/g, "");
-      }
-    });
+    return chunks.join("");
+  }
 
-    return newText;
-  };
   return (
     <div className="container">
       <h2 className="title">Remove Citations from Perplexity Output</h2>
